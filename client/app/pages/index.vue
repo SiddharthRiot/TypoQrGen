@@ -301,6 +301,70 @@ onMounted(() => {
       }
     )
   })
+  gsap.to(bgNumRef.value, {
+    y: -200,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: 'body',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 1.5
+    }
+  })
+
+  ScrollTrigger.create({
+    trigger: '#hero',
+    start: 'top top',
+    end: '+=600',
+    pin: true,
+    pinSpacing: false,
+    scrub: true
+  })
+
+  gsap.to(line1Ref.value, {
+    x: -150,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#hero',
+      start: 'top top',
+      end: '+=600',
+      scrub: 1.5
+    }
+  })
+
+  gsap.to(line2Ref.value, {
+    x: 150,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#hero',
+      start: 'top top',
+      end: '+=600',
+      scrub: 1.5
+    }
+  })
+
+  gsap.to(line3Ref.value, {
+    x: -100,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#hero',
+      start: 'top top',
+      end: '+=600',
+      scrub: 1.5
+    }
+  })
+
+  gsap.to(subtitleRef.value, {
+    opacity: 0,
+    y: -50,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#hero',
+      start: 'top top',
+      end: '+=300',
+      scrub: 1
+    }
+  })
 })
 
 const types = [
