@@ -1,7 +1,7 @@
 <template>
   <div>
     <Head>
-      <Title>QR Studio — Generate QR Codes for Text, Links, Images & Videos</Title>
+      <Title>QR Studio Generate QR Codes for Text, Links, Images & Videos</Title>
       <Meta name="description" content="Free QR code generator. Create QR codes for text, URLs, images, and videos instantly." />
       <Meta name="robots" content="index, follow" />
     </Head>
@@ -29,17 +29,17 @@
             The QR Code Generator
           </p>
 
-          <div class="overflow-hidden mb-2">
+          <div class="mb-2">
             <h1 ref="line1Ref" class="text-[clamp(4rem,13vw,13rem)] font-black leading-[0.85] text-white tracking-tighter" style="transform: translateY(120%); opacity: 0;">
               Generate
             </h1>
           </div>
-          <div class="overflow-hidden mb-2">
-            <h1 ref="line2Ref" class="text-[clamp(4rem,13vw,13rem)] font-black leading-[0.85] tracking-tighter" style="transform: translateY(120%); opacity: 0; color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.2);">
+          <div class="mb-2">
+            <h1 ref="line2Ref" class="text-[clamp(4rem,13vw,13rem)] font-black leading-[0.85] tracking-tighter text-green-400" style="transform: translateY(120%); opacity: 0;">
               Anything
             </h1>
           </div>
-          <div class="overflow-hidden mb-12">
+          <div class="mb-12">
             <h1 ref="line3Ref" class="text-[clamp(4rem,13vw,13rem)] font-black leading-[0.85] text-white tracking-tighter" style="transform: translateY(120%); opacity: 0;">
               Instantly.
             </h1>
@@ -47,15 +47,24 @@
 
           <div ref="subtitleRef" class="flex flex-col md:flex-row md:items-end justify-between gap-8" style="opacity: 0; transform: translateY(30px);">
             <p class="text-neutral-500 text-lg max-w-xs leading-relaxed">
-              Text, links, images, videos — encoded into a fixed-size QR. Clean. Fast. Free.
+              Text, links, images, videos encoded into a fixed-size QR. Clean. Fast. Free.
             </p>
-            <button
-              @click="scrollToGenerator"
-              class="group flex items-center gap-4 text-white font-bold text-sm tracking-widest uppercase"
-            >
-              <span>Start Generating</span>
-              <span class="w-12 h-12 rounded-full border border-neutral-700 flex items-center justify-center group-hover:bg-green-400 group-hover:border-green-400 group-hover:text-black transition-all duration-300">→</span>
-            </button>
+            <div class="flex gap-4">
+              <button
+                @click="scrollToGenerator"
+                class="group flex items-center gap-4 text-white font-bold text-sm tracking-widest uppercase"
+              >
+                <span>Generate</span>
+                <span class="w-12 h-12 rounded-full border border-neutral-700 flex items-center justify-center group-hover:bg-green-400 group-hover:border-green-400 group-hover:text-black transition-all duration-300">→</span>
+              </button>
+              <NuxtLink
+                to="/decode"
+                class="group flex items-center gap-4 text-neutral-500 font-bold text-sm tracking-widest uppercase hover:text-white transition-colors"
+              >
+                <span>Decode</span>
+                <span class="w-12 h-12 rounded-full border border-neutral-800 flex items-center justify-center group-hover:bg-neutral-800 transition-all duration-300">↓</span>
+              </NuxtLink>
+            </div>
           </div>
         </div>
 
@@ -78,35 +87,36 @@
 
           <div>
             <p class="reveal-text text-neutral-600 text-xs tracking-[0.4em] uppercase mb-6">01 / Configure</p>
-            <div class="overflow-hidden mb-10">
+            <div class="mb-10">
               <h2 class="reveal-text text-4xl md:text-6xl font-black text-white tracking-tighter leading-none">
                 What are<br />you encoding?
               </h2>
             </div>
 
+            <!-- Type tabs -->
             <div class="flex gap-2 mb-8 flex-wrap">
               <button
                 v-for="t in types"
                 :key="t.value"
                 @click="selectedType = t.value"
                 :class="[
-                  'px-5 py-2 rounded-full text-sm font-bold tracking-wide transition-all duration-300',
+                  'px-6 py-3 text-sm font-black tracking-widest uppercase transition-all duration-300 cursor-pointer border-b-2',
                   selectedType === t.value
-                    ? 'bg-green-400 text-black'
-                    : 'border border-neutral-800 text-neutral-600 hover:border-neutral-600 hover:text-neutral-300'
+                    ? 'text-green-400 border-green-400'
+                    : 'text-neutral-600 border-transparent hover:text-neutral-300 hover:border-neutral-600'
                 ]"
               >
                 {{ t.label }}
               </button>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-5">
               <div>
                 <label class="text-xs font-bold tracking-[0.3em] text-neutral-700 uppercase block mb-2">Label (optional)</label>
                 <input
                   v-model="label"
                   placeholder="e.g. My Portfolio"
-                  class="w-full bg-transparent border border-neutral-800 rounded-xl px-5 py-4 text-white placeholder-neutral-800 focus:outline-none focus:border-green-400 transition-colors text-sm"
+                  class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-5 py-4 text-white placeholder-neutral-700 focus:outline-none focus:border-green-400 focus:bg-neutral-800 transition-all text-sm"
                 />
               </div>
               <div>
@@ -115,16 +125,25 @@
                   v-model="content"
                   :placeholder="placeholder"
                   rows="5"
-                  class="w-full bg-transparent border border-neutral-800 rounded-xl px-5 py-4 text-white placeholder-neutral-800 focus:outline-none focus:border-green-400 transition-colors text-sm resize-none"
+                  class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-5 py-4 text-white placeholder-neutral-700 focus:outline-none focus:border-green-400 focus:bg-neutral-800 transition-all text-sm resize-none"
                 />
               </div>
               <button
                 @click="generate"
                 :disabled="loading || !content.trim()"
-                class="w-full py-5 rounded-xl font-black text-black bg-green-400 hover:bg-green-300 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 text-sm tracking-widest uppercase"
+                class="w-full py-5 rounded-xl font-black text-black bg-green-400 hover:bg-green-300 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 text-sm tracking-widest uppercase cursor-pointer"
               >
                 {{ loading ? 'Generating...' : 'Generate QR Code' }}
               </button>
+
+              <!-- Decode CTA -->
+              <NuxtLink
+                to="/decode"
+                class="flex items-center justify-center gap-3 w-full py-4 rounded-xl border border-neutral-800 text-neutral-600 hover:border-green-400 hover:text-green-400 transition-all duration-300 text-sm font-bold tracking-widest uppercase cursor-pointer group"
+              >
+                <span>Decode a QR Code Instead</span>
+                <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+              </NuxtLink>
             </div>
           </div>
 
@@ -189,7 +208,7 @@
       <section class="px-8 md:px-16 py-32 border-t border-neutral-900">
         <div class="max-w-7xl mx-auto text-center">
           <div class="overflow-hidden mb-8">
-            <h2 class="reveal-text text-6xl md:text-9xl font-black tracking-tighter leading-none" style="color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.15);">
+            <h2 class="reveal-text text-6xl md:text-9xl font-black tracking-tighter leading-none text-white">
               Make Your QR
             </h2>
           </div>
@@ -217,9 +236,9 @@ import Lenis from '@studio-freight/lenis'
 gsap.registerPlugin(ScrollTrigger)
 
 useSeoMeta({
-  title: 'QR Studio — Free QR Code Generator',
+  title: 'QR Studio Free QR Code Generator',
   description: 'Generate QR codes for text, links, images, and videos. Fixed size, clean design, free forever.',
-  ogTitle: 'QR Studio — Free QR Code Generator',
+  ogTitle: 'QR Studio Free QR Code Generator',
   ogDescription: 'Generate QR codes for text, links, images, and videos instantly.',
   twitterCard: 'summary_large_image'
 })
@@ -292,8 +311,8 @@ const types = [
 ]
 
 const features = [
-  { title: 'Fixed Size QR', desc: 'Every QR code is the same compact size — whether it\'s 5 characters or 500.' },
-  { title: 'Any Content', desc: 'Text, URLs, image links, video links — all supported with one clean interface.' },
+  { title: 'Fixed Size QR', desc: 'Every QR code is the same compact size whether it\'s 5 characters or 500.' },
+  { title: 'Any Content', desc: 'Text, URLs, image links, video links all supported with one clean interface.' },
   { title: 'Instant Download', desc: 'Download your QR code as a high-quality PNG, ready to print or share.' }
 ]
 

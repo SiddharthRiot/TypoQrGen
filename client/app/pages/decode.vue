@@ -1,7 +1,7 @@
 <template>
   <div>
     <Head>
-      <Title>QR Decoder — Scan & Decode Any QR Code | QR Studio</Title>
+      <Title>QR Decoder Scan & Decode Any QR Code | QR Studio</Title>
       <Meta name="description" content="Upload any QR code image and decode its content instantly. Free QR code decoder by QR Studio." />
       <Meta name="robots" content="index, follow" />
     </Head>
@@ -55,7 +55,7 @@
                 <span class="text-2xl">↑</span>
               </div>
               <p class="text-white font-bold text-lg mb-2">Drop your QR code here</p>
-              <p class="text-neutral-600 text-sm">or click to browse — PNG, JPG, WebP supported</p>
+              <p class="text-neutral-600 text-sm">or click to browse PNG, JPG, WebP supported</p>
             </div>
 
             <div v-else class="flex flex-col items-center gap-6">
@@ -127,7 +127,7 @@ import { ref, computed, onMounted } from 'vue'
 import { gsap } from 'gsap'
 
 useSeoMeta({
-  title: 'QR Decoder — Decode Any QR Code Free | QR Studio',
+  title: 'QR Decoder Decode Any QR Code Free | QR Studio',
   description: 'Upload any QR code image and instantly decode its content. Free, fast, no signup required.',
   twitterCard: 'summary_large_image'
 })
