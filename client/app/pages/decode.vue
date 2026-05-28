@@ -197,7 +197,7 @@ import { ref, computed, onMounted } from 'vue'
 import { gsap } from 'gsap'
 
 useSeoMeta({
-  title: 'QR Decoder — Decode Any QR Code Free | QR Studio',
+  title: 'QR Decoder Decode Any QR Code Free | QR Studio',
   description: 'Upload any QR code image and instantly decode its content. Free, fast, no signup required.',
   twitterCard: 'summary_large_image'
 })

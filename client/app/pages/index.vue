@@ -93,7 +93,6 @@
               </h2>
             </div>
 
-            <!-- Type tabs -->
             <div class="flex gap-2 mb-8 flex-wrap">
               <button
                 v-for="t in types"
@@ -136,7 +135,6 @@
                 {{ loading ? 'Generating...' : 'Generate QR Code' }}
               </button>
 
-              <!-- Decode CTA -->
               <NuxtLink
                 to="/decode"
                 class="flex items-center justify-center gap-3 w-full py-4 rounded-xl border border-neutral-800 text-neutral-600 hover:border-green-400 hover:text-green-400 transition-all duration-300 text-sm font-bold tracking-widest uppercase cursor-pointer group"
@@ -188,20 +186,48 @@
         </div>
       </section>
 
-      <section class="px-8 md:px-16 py-32 border-t border-neutral-900">
-        <div class="max-w-7xl mx-auto">
-          <div class="overflow-hidden mb-16">
-            <h2 class="reveal-text text-5xl md:text-7xl font-black text-white tracking-tighter leading-none">
-              Why QR Studio?
-            </h2>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-neutral-900">
-            <div v-for="(f, i) in features" :key="i" class="bg-[#080808] p-10 group hover:bg-neutral-900 transition-colors duration-500">
-              <span class="text-green-400 text-xs font-bold tracking-[0.3em] uppercase">0{{ i + 1 }}</span>
-              <h3 class="text-white font-black text-2xl tracking-tight mt-6 mb-4 group-hover:text-green-400 transition-colors duration-300">{{ f.title }}</h3>
-              <p class="text-neutral-700 text-sm leading-relaxed">{{ f.desc }}</p>
+      <section ref="featuresRef" class="relative border-t border-neutral-900">
+        <div class="sticky top-0 h-screen flex flex-col overflow-hidden">
+
+          <div class="px-8 md:px-16 pt-16 pb-8 flex items-start justify-between">
+            <div>
+              <p class="text-green-400 text-xs font-bold tracking-[0.4em] uppercase mb-3">Why QR Studio?</p>
+              <h2 class="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none">Built different.</h2>
+            </div>
+            <div class="flex items-center gap-3 mt-2">
+              <div class="w-8 h-px bg-neutral-800"></div>
+              <p class="text-neutral-800 text-xs tracking-widest uppercase">Scroll to explore</p>
             </div>
           </div>
+
+          <div class="flex-1 flex items-center overflow-hidden">
+            <div ref="hTrackRef" class="flex gap-6" style="width: max-content; will-change: transform; padding-left: calc(50vw - 250px);">
+              <div
+                v-for="(f, i) in features"
+                :key="i"
+                class="feature-card group relative rounded-3xl overflow-hidden"
+                style="width: 500px; height: 400px; flex-shrink: 0; background: #0f0f0f; border: 1px solid #1a1a1a;"
+              >
+                <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="absolute bottom-0 right-0 text-[9rem] font-black leading-none select-none pointer-events-none translate-x-4 translate-y-6" style="color: rgba(255,255,255,0.03);">
+                  {{ f.letter }}
+                </div>
+                <div class="relative z-10 p-10 h-full flex flex-col justify-between">
+                  <div>
+                    <span class="text-green-400 text-xs font-bold tracking-[0.4em] uppercase block mb-8">{{ f.num }}</span>
+                    <h3 class="font-black text-4xl tracking-tighter leading-[1] mb-5 transition-colors duration-300" style="color: #e8e8e8; white-space: pre-line;">{{ f.title }}</h3>
+                    <div class="w-8 h-px bg-neutral-700 mb-5"></div>
+                    <p class="text-neutral-600 text-sm leading-relaxed max-w-xs">{{ f.desc }}</p>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-neutral-800 text-xs font-bold tracking-widest uppercase">{{ f.tag }}</span>
+                    <div class="w-8 h-8 rounded-full border border-neutral-800 flex items-center justify-center group-hover:border-green-400 group-hover:text-green-400 transition-all duration-300 text-neutral-800 text-sm">→</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -257,6 +283,8 @@ const bgNumRef = ref<HTMLElement | null>(null)
 const marqueeRef = ref<HTMLElement | null>(null)
 const cursorRef = ref<HTMLElement | null>(null)
 const cursorFollowerRef = ref<HTMLElement | null>(null)
+  const featuresRef = ref<HTMLElement | null>(null)
+const hTrackRef = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   const lenis = new Lenis()
@@ -365,6 +393,36 @@ onMounted(() => {
       scrub: 1
     }
   })
+  if (hTrackRef.value && featuresRef.value) {
+    const cards = gsap.utils.toArray('.feature-card') as HTMLElement[]
+    const cardWidth = 500 + 24
+    const totalScroll = cardWidth * (features.length - 1)
+
+    gsap.set(cards, { opacity: 0.2, scale: 0.9 })
+    gsap.set(cards[0] as HTMLElement, { opacity: 1, scale: 1 })
+
+    ScrollTrigger.create({
+      trigger: featuresRef.value,
+      start: 'top top',
+      end: `+=${totalScroll * 2}`,
+      pin: true,
+      scrub: 1,
+      anticipatePin: 1,
+      onUpdate: (self) => {
+        const x = -totalScroll * self.progress
+        gsap.set(hTrackRef.value, { x })
+        const activeIndex = Math.round(self.progress * (features.length - 1))
+        cards.forEach((card, i) => {
+          gsap.to(card, {
+            opacity: i === activeIndex ? 1 : 0.2,
+            scale: i === activeIndex ? 1 : 0.9,
+            duration: 0.3,
+            ease: 'power2.out'
+          })
+        })
+      }
+    })
+  }
 })
 
 const types = [
@@ -375,9 +433,34 @@ const types = [
 ]
 
 const features = [
-  { title: 'Fixed Size QR', desc: 'Every QR code is the same compact size whether it\'s 5 characters or 500.' },
-  { title: 'Any Content', desc: 'Text, URLs, image links, video links all supported with one clean interface.' },
-  { title: 'Instant Download', desc: 'Download your QR code as a high-quality PNG, ready to print or share.' }
+  {
+    letter: 'Q',
+    title: 'Fixed Size,\nAlways.',
+    desc: 'Every QR code is generated at the exact same size whether the content is 5 characters or 5000. No surprises, no distortion.',
+    tag: 'Consistent Output',
+    num: '01'
+  },
+  {
+    letter: 'R',
+    title: 'Any Content\nType.',
+    desc: 'Text, URLs, image links, video links all encoded with one clean interface. No separate tools needed.',
+    tag: 'Universal Support',
+    num: '02'
+  },
+  {
+    letter: 'S',
+    title: 'Instant\nDownload.',
+    desc: 'Your QR code is ready as a high-quality PNG the moment it generates. Print it, share it, embed it anywhere.',
+    tag: 'Production Ready',
+    num: '03'
+  },
+  {
+    letter: 'T',
+    title: 'Decode\nAnything.',
+    desc: 'Already have a QR code? Upload it and decode its content instantly. Works with any QR code from any source.',
+    tag: 'Bi-directional',
+    num: '04'
+  }
 ]
 
 const selectedType = ref('text')
