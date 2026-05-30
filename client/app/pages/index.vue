@@ -15,7 +15,6 @@
 
       <nav ref="navRef" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 opacity-0">
         <span class="text-white font-black text-sm tracking-[0.2em] uppercase">QR Studio</span>
-        <span class="text-neutral-600 text-xs tracking-widest uppercase">Free · Open · Fast</span>
       </nav>
 
       <section class="relative h-screen flex flex-col justify-center px-8 md:px-16 overflow-hidden">
@@ -231,16 +230,40 @@
         </div>
       </section>
 
-      <section class="px-8 md:px-16 py-32 border-t border-neutral-900">
-        <div class="max-w-7xl mx-auto text-center">
-          <div class="overflow-hidden mb-8">
-            <h2 class="reveal-text text-6xl md:text-9xl font-black tracking-tighter leading-none text-white">
-              Make Your QR
-            </h2>
+      <section class="px-8 md:px-16 border-t border-neutral-900 relative overflow-hidden min-h-screen flex flex-col justify-center">
+        <!-- Big background text -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+          <span class="text-[18vw] font-black tracking-tighter leading-none whitespace-nowrap" style="color: rgba(255,255,255,0.02);">QR STUDIO</span>
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+          <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-12">
+
+            <div>
+              <p class="text-green-400 text-xs font-bold tracking-[0.4em] uppercase mb-6">Ready?</p>
+              <h2 class="text-7xl md:text-[9rem] font-black tracking-tighter leading-[0.85] text-white">
+                Make<br />Your QR.
+              </h2>
+            </div>
+
+            <div class="flex flex-col gap-4 md:mb-4">
+              <button
+                @click="scrollToGenerator"
+                class="group flex items-center gap-5 px-8 py-5 rounded-full bg-green-400 text-black font-black text-sm tracking-widest uppercase hover:bg-green-300 transition-all duration-300"
+              >
+                <span>Generate Now</span>
+                <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+              </button>
+              <NuxtLink
+                to="/decode"
+                class="group flex items-center gap-5 px-8 py-5 rounded-full border border-neutral-800 text-neutral-500 font-bold text-sm tracking-widest uppercase hover:border-green-400 hover:text-green-400 transition-all duration-300"
+              >
+                <span>Decode a QR</span>
+                <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+              </NuxtLink>
+            </div>
+
           </div>
-          <button @click="scrollToGenerator" class="mt-8 px-12 py-5 rounded-full bg-green-400 text-black font-black text-sm tracking-widest uppercase hover:bg-green-300 transition-all duration-300">
-            Generate Now →
-          </button>
         </div>
       </section>
 
