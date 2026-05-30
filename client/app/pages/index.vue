@@ -13,9 +13,36 @@
       </div>
 
 
-      <nav ref="navRef" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 opacity-0">
+      <nav ref="navRef" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 opacity-0" style="background: linear-gradient(to bottom, rgba(8,8,8,0.9), transparent);">
         <span class="text-white font-black text-sm tracking-[0.2em] uppercase">QR Studio</span>
+        <div class="flex items-center gap-3">
+          <template v-if="currentUser">
+            <span class="text-neutral-500 text-xs tracking-widest uppercase">{{ currentUser.name }}</span>
+            <button
+              @click="signOut"
+              class="px-5 py-2 text-xs font-bold tracking-widest uppercase text-neutral-500 hover:text-white transition-colors duration-300"
+            >
+              Sign Out
+            </button>
+          </template>
+          <template v-else>
+            <button
+              @click="openAuth('signin')"
+              class="px-5 py-2 text-xs font-bold tracking-widest uppercase text-neutral-500 hover:text-white transition-colors duration-300"
+            >
+              Sign In
+            </button>
+            <button
+              @click="openAuth('signup')"
+              class="px-5 py-2 rounded-full bg-green-400 text-black text-xs font-black tracking-widest uppercase hover:bg-green-300 transition-all duration-300"
+            >
+              Sign Up
+            </button>
+          </template>
+        </div>
       </nav>
+
+      <AuthModal :is-open="authOpen" :initial-mode="authMode" @close="authOpen = false" @success="onAuthSuccess" />
 
       <section class="relative h-screen flex flex-col justify-center px-8 md:px-16 overflow-hidden">
 
@@ -491,6 +518,32 @@ const content = ref('')
 const label = ref('')
 const loading = ref(false)
 const qrResult = ref<any>(null)
+const authOpen = ref(false)
+const authMode = ref<'signin' | 'signup'>('signin')
+
+function openAuth(mode: 'signin' | 'signup') {
+  authMode.value = mode
+  authOpen.value = true
+}
+
+const currentUser = ref<any>(null)
+
+onMounted(() => {
+  const stored = localStorage.getItem('qr_user')
+  if (stored) currentUser.value = JSON.parse(stored)
+})
+
+function onAuthSuccess(user: any) {
+  currentUser.value = user
+  authOpen.value = false
+  gsap.to(navRef.value, { opacity: 1, duration: 0.3 })
+}
+
+function signOut() {
+  localStorage.removeItem('qr_token')
+  localStorage.removeItem('qr_user')
+  currentUser.value = null
+}
 
 const contentLabel = computed(() => {
   const map: Record<string, string> = { text: 'Your Text', link: 'URL', image: 'Image URL', video: 'Video URL' }
